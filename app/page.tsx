@@ -7,9 +7,12 @@ import Testimonials from "@/components/Testimonials";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
 
+import ScrollToTopOnReload from "@/components/ScrollToTopOnReload";
+
 export default function Home() {
   return (
     <main>
+      <ScrollToTopOnReload />
       <Navbar />
       <Hero />
       <About />

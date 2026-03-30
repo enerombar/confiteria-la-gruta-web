@@ -1,10 +1,24 @@
+"use client";
+
+import { motion } from "framer-motion";
+
 export default function Contact() {
+  const itemVariant: any = {
+    hidden: { opacity: 0, x: -20 },
+    show: { opacity: 1, x: 0, transition: { duration: 0.6, ease: "easeOut" } }
+  };
+
   return (
     <section className="contact" id="contacto">
       <div className="container">
         <div className="contact-grid">
           {/* INFO */}
-          <div>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 1 }}
+          >
             <p className="section-subtitle">Encuéntranos</p>
             <h2 className="section-title" style={{ textAlign: "left", marginBottom: "12px" }}>
               Visítanos en Aracena
@@ -12,7 +26,7 @@ export default function Contact() {
             <div className="gold-divider" style={{ margin: "16px 0 32px", marginLeft: 0 }} />
 
             <div className="contact-items">
-              <div className="contact-item">
+              <motion.div className="contact-item" initial="hidden" whileInView="show" viewport={{ once: true }} variants={itemVariant}>
                 <div className="contact-icon">
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
                     <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/>
@@ -30,9 +44,9 @@ export default function Contact() {
                     C/ Pintor Mario León Ruiz, 4B<br />21200 Aracena, Huelva
                   </a>
                 </div>
-              </div>
+              </motion.div>
 
-              <div className="contact-item">
+              <motion.div className="contact-item" initial="hidden" whileInView="show" viewport={{ once: true }} variants={itemVariant} transition={{ delay: 0.1 }}>
                 <div className="contact-icon">
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
                     <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 10.8 19.79 19.79 0 010 2.18 2 2 0 012 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.91 7.91a16 16 0 006.18 6.18l1.28-1.28a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 14.92v2z"/>
@@ -42,9 +56,9 @@ export default function Contact() {
                   <div className="contact-item-label">Teléfono</div>
                   <a className="contact-item-value" href="tel:+34690834617">+34 690 834 617</a>
                 </div>
-              </div>
+              </motion.div>
 
-              <div className="contact-item">
+              <motion.div className="contact-item" initial="hidden" whileInView="show" viewport={{ once: true }} variants={itemVariant} transition={{ delay: 0.2 }}>
                 <div className="contact-icon">
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
                     <circle cx="12" cy="12" r="10"/>
@@ -58,7 +72,7 @@ export default function Contact() {
                     Martes y Miércoles: Cerrado
                   </div>
                 </div>
-              </div>
+              </motion.div>
             </div>
 
             <div className="contact-socials">
@@ -80,10 +94,16 @@ export default function Contact() {
                 </svg>
               </a>
             </div>
-          </div>
+          </motion.div>
 
           {/* MAPA */}
-          <div className="map-container">
+          <motion.div 
+            className="map-container"
+            initial={{ opacity: 0, scale: 0.98 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 1 }}
+          >
             <iframe
               src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3148.653912761857!2d-6.5673837!3d37.891775599999995!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd117b9ebca184e7%3A0x69ce9ad001ae58ba!2sConfiter%C3%ADa%20La%20Gruta%20Aracena!5e0!3m2!1ses!2ses!4v1743410940141!5m2!1ses!2ses"
               title="Ubicación Confitería La Gruta"
@@ -91,7 +111,7 @@ export default function Contact() {
               loading="lazy"
               referrerPolicy="no-referrer-when-downgrade"
             />
-          </div>
+          </motion.div>
         </div>
       </div>
     </section>

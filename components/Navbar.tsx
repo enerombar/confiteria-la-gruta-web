@@ -3,14 +3,44 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
 
+const navLinks = [
+  { href: "#nosotros", label: "Nosotros" },
+  { href: "#especialidades", label: "Especialidades" },
+  { href: "#galeria", label: "Galería" },
+  { href: "#contacto", label: "Contacto", isCta: true },
+];
+
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState("");
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 60);
     window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+
+    // ScrollSpy
+    const sections = ["nosotros", "especialidades", "galeria", "contacto"];
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setActiveSection(entry.target.id);
+          }
+        });
+      },
+      { rootMargin: "-150px 0px -60% 0px" } // Detect which section is mostly visible
+    );
+
+    sections.forEach((id) => {
+      const el = document.getElementById(id);
+      if (el) observer.observe(el);
+    });
+
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      observer.disconnect();
+    };
   }, []);
 
   const closeMenu = () => setMenuOpen(false);
@@ -33,10 +63,16 @@ export default function Navbar() {
           </a>
 
           <ul className="navbar-links">
-            <li><a href="#nosotros">Nosotros</a></li>
-            <li><a href="#especialidades">Especialidades</a></li>
-            <li><a href="#galeria">Galería</a></li>
-            <li><a href="#contacto" className="navbar-cta">Contacto</a></li>
+            {navLinks.map((link) => (
+              <li key={link.href}>
+                <a 
+                  href={link.href} 
+                  className={`${link.isCta ? "navbar-cta" : ""} ${activeSection === link.href.replace("#", "") ? "active" : ""}`}
+                >
+                  {link.label}
+                </a>
+              </li>
+            ))}
           </ul>
 
           <button
@@ -54,10 +90,10 @@ export default function Navbar() {
       {menuOpen && (
         <div className="mobile-menu">
           <a href="#inicio" onClick={closeMenu}>Inicio</a>
-          <a href="#nosotros" onClick={closeMenu}>Nosotros</a>
-          <a href="#especialidades" onClick={closeMenu}>Especialidades</a>
-          <a href="#galeria" onClick={closeMenu}>Galería</a>
-          <a href="#contacto" onClick={closeMenu}>Contacto</a>
+          <a href="#nosotros" className={activeSection === "nosotros" ? "active" : ""} onClick={closeMenu}>Nosotros</a>
+          <a href="#especialidades" className={activeSection === "especialidades" ? "active" : ""} onClick={closeMenu}>Especialidades</a>
+          <a href="#galeria" className={activeSection === "galeria" ? "active" : ""} onClick={closeMenu}>Galería</a>
+          <a href="#contacto" className={activeSection === "contacto" ? "active" : ""} onClick={closeMenu}>Contacto</a>
         </div>
       )}
     </>

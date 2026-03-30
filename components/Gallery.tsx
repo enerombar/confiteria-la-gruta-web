@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
+import { motion, AnimatePresence } from "framer-motion";
 
 const galleryImages = [
   { src: "/fotos/variado_2.jpg", alt: "Surtido de pastelería" },
@@ -19,24 +20,54 @@ const galleryImages = [
 export default function Gallery() {
   const [lightboxIdx, setLightboxIdx] = useState<number | null>(null);
 
-  const prev = () => setLightboxIdx((p) => (p! - 1 + galleryImages.length) % galleryImages.length);
-  const next = () => setLightboxIdx((p) => (p! + 1) % galleryImages.length);
+  const prev = () => setLightboxIdx((p) => (p !== null ? (p - 1 + galleryImages.length) % galleryImages.length : null));
+  const next = () => setLightboxIdx((p) => (p !== null ? (p + 1) % galleryImages.length : null));
+
+  const container: any = {
+    hidden: { opacity: 0 },
+    show: {
+      opacity: 1,
+      transition: { staggerChildren: 0.08 }
+    }
+  };
+
+  const item: any = {
+    hidden: { opacity: 0, scale: 0.92 },
+    show: { 
+      opacity: 1, 
+      scale: 1, 
+      transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] } 
+    }
+  };
 
   return (
     <>
       <section className="gallery" id="galeria">
         <div className="container">
-          <div className="gallery-header">
+          <motion.div 
+            className="gallery-header"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 1 }}
+          >
             <p className="section-subtitle">Momentos dulces</p>
             <h2 className="section-title">Galería</h2>
             <div className="gold-divider" />
-          </div>
+          </motion.div>
 
-          <div className="gallery-masonry">
+          <motion.div 
+            className="gallery-masonry"
+            variants={container}
+            initial="hidden"
+            whileInView="show"
+            viewport={{ once: true, margin: "-50px" }}
+          >
             {galleryImages.map((img, i) => (
-              <div
+              <motion.div
                 className="gallery-item"
                 key={i}
+                variants={item}
                 onClick={() => setLightboxIdx(i)}
               >
                 <Image
@@ -53,27 +84,43 @@ export default function Gallery() {
                     <path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7" />
                   </svg>
                 </div>
-              </div>
+              </motion.div>
             ))}
-          </div>
+          </motion.div>
         </div>
       </section>
 
-      {lightboxIdx !== null && (
-        <div className="lightbox" onClick={() => setLightboxIdx(null)}>
-          <button className="lightbox-close" onClick={() => setLightboxIdx(null)}>×</button>
-          <button className="lightbox-prev" onClick={(e) => { e.stopPropagation(); prev(); }}>‹</button>
-          <Image
-            src={galleryImages[lightboxIdx].src}
-            alt={galleryImages[lightboxIdx].alt}
-            width={1200}
-            height={900}
-            onClick={(e) => e.stopPropagation()}
-            style={{ maxWidth: "100%", maxHeight: "90vh", objectFit: "contain", borderRadius: "4px" }}
-          />
-          <button className="lightbox-next" onClick={(e) => { e.stopPropagation(); next(); }}>›</button>
-        </div>
-      )}
+      <AnimatePresence>
+        {lightboxIdx !== null && (
+          <motion.div 
+            className="lightbox" 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setLightboxIdx(null)}
+          >
+            <button className="lightbox-close" onClick={() => setLightboxIdx(null)}>×</button>
+            <button className="lightbox-prev" onClick={(e) => { e.stopPropagation(); prev(); }}>‹</button>
+            <motion.div 
+              className="lightbox-img-wrapper"
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              transition={{ duration: 0.4 }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <Image
+                src={galleryImages[lightboxIdx].src}
+                alt={galleryImages[lightboxIdx].alt}
+                width={1200}
+                height={900}
+                style={{ maxWidth: "100%", maxHeight: "90vh", objectFit: "contain", borderRadius: "4px" }}
+              />
+            </motion.div>
+            <button className="lightbox-next" onClick={(e) => { e.stopPropagation(); next(); }}>›</button>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </>
   );
 }

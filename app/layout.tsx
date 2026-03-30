@@ -70,14 +70,6 @@ export default function RootLayout({
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        {/* Preload LCP hero image — mejora el LCP drásticamente */}
-        <link
-          rel="preload"
-          as="image"
-          href="/fotos/escaparate_2.jpg"
-          // @ts-expect-error fetchpriority is valid HTML but not yet in React types
-          fetchpriority="high"
-        />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
