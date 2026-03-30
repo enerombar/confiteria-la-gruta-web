@@ -1,8 +1,7 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
-import Link from "next/link";
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
@@ -24,8 +23,9 @@ export default function Navbar() {
             <Image
               src="/fotos/logo_la_gruta.jpg"
               alt="Logo Confitería La Gruta"
-              width={50}
-              height={50}
+              width={44}
+              height={44}
+              sizes="44px"
               style={{ borderRadius: "50%", objectFit: "cover" }}
               priority
             />
